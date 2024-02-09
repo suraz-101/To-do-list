@@ -17,7 +17,7 @@ mongoose.connect(`${process.env.CONNECTION_STRING}`).then(() => {
 app.use(`${apiVersion}`, router);
 
 app.use((error, req, res, next) => {
-  const err = error ? error.toStringfy() : "something wend wrong";
+  const err = error ? error.toString() : "something wend wrong";
   res.status(500).json({ message: err });
 });
 
