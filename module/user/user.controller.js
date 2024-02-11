@@ -1,6 +1,7 @@
 const userModel = require("./user.model");
 const { encryption, decryption } = require("../../utils/bcrypt");
 const { mailer } = require("../../services/mailer");
+const { token } = require("../../utils/token");
 
 const createUser = async (payload) => {
   // const
@@ -38,12 +39,14 @@ const loginUser = async (payload) => {
   if (!email || !password)
     throw new Error("Username and Password are mandatory");
 
-  const user = await userModel.findOne({ email });
+  const user = await userModel.findOne({ email }).select("+password");
   if (!user) throw new Error("Please enter valid username");
   const { password: hashPassword } = user;
   const comparision = await decryption(password, hashPassword);
   if (!comparision) throw new Error("login failed");
-  return "You are logged in successfully, CONTRATULATIONS!!";
+  const userPayload = { name: user.name, email: user.email, role: user.role };
+  const generatedToken = await token(userPayload);
+  return generatedToken;
 };
 
 module.exports = {
