@@ -2,7 +2,7 @@ const usersRoute = require("express").Router();
 const userController = require("./user.controller");
 const { userValidation } = require("./user.validate");
 const { checkRole } = require("../../utils/sessionManager");
-usersRoute.get("/", checkRole(["admin"]), async (req, res, next) => {
+usersRoute.get("/", checkRole(["user"]), async (req, res, next) => {
   try {
     const result = await userController.getAllUsers();
     res.status(200).json({ message: result });

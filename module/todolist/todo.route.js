@@ -1,5 +1,7 @@
 const toDoRouter = require("express").Router();
+const { restart } = require("nodemon");
 const controller = require("./route.controller");
+const { validation } = require("./todo.validation");
 
 toDoRouter.get("/", async (req, res, next) => {
   try {
@@ -19,10 +21,11 @@ toDoRouter.post("/", async (req, res, next) => {
   }
 });
 
-toDoRouter.put("/:id", async (req, res, next) => {
+toDoRouter.put("/updateList", validation, async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const result = await controller.updateList(id, req.body);
+    const { id, ...rest } = req.body;
+    if (!id) throw new Error("Id is required");
+    const result = await controller.updateList(id, rest);
     res.json({ updatedData: result });
   } catch (error) {
     next(error);

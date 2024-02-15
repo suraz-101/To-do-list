@@ -7,7 +7,7 @@ const listSchema = new mongoose.Schema({
   updatedAt: { type: Date, default: Date.now },
   addedBy: {
     type: ObjectId,
-    ref: "user",
+    ref: "User",
     required: [true, "Who added the list"],
   },
 });
